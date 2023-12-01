@@ -1,0 +1,197 @@
+Assignment Day2
+
+AddStudent:
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+/**
+ * Servlet implementation class AddStudent
+ */
+public class AddStudent extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private Connection con;
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
+	public void init(ServletConfig config) throws ServletException {
+		try {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		String url="jdbc:mysql://localhost:3306/bit";
+		con = DriverManager.getConnection(url,"root","Emiway@sourav12");
+		}
+		catch(Exception ee) 
+		{
+			ee.printStackTrace();
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+				response.setContentType("text/html");			
+				PrintWriter rw=response.getWriter();
+				String name=request.getParameter("name");
+				int age=Integer.parseInt(request.getParameter("age"));
+				String address=request.getParameter("address");
+				PreparedStatement ps= con.prepareStatement("insert into student(name,age,address) values(?,?,?)");
+				ps.setString(1,name);
+				ps.setInt(2,age);
+				ps.setString(3,address);
+				rw.println();		
+				int k=ps.executeUpdate();
+				if(k>0) 
+				{
+					rw.println("record is updated");
+				}
+				else
+				{
+					rw.println("record not updated ");	
+				}
+		}
+		catch(Exception ee) {
+			ee.printStackTrace();
+		}
+	}
+}
+
+viewstudent:
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+/**
+ * Servlet implementation class ViewStudent
+ */
+public class ViewStudent extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private Connection con;
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
+	public void init(ServletConfig config) throws ServletException {
+		try {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		String url="jdbc:mysql://localhost:3306/bit";
+		con=DriverManager.getConnection(url,"root","Emiway@sourav12");
+		}
+		catch(Exception ee) {
+			ee.printStackTrace();
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PrintWriter pw=response.getWriter();
+		try {
+						
+			PreparedStatement pst = con.prepareStatement("select * from student");
+			ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				int rollno=rs.getInt("rollno");
+				String name=rs.getString("name");
+				int age=rs.getInt("age");
+				String address=rs.getString("address");
+				
+				pw.println(rollno+" "+name+" "+age+" "+address);			
+				}
+		}
+		catch(Exception ee) {
+			ee.printStackTrace();
+		}
+	
+	}
+
+}
+
+student.html:
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>Student portal</h2>
+	
+<a href="Data.html">Add Student </a> 
+<br>
+<a href="ViewStudent"> View Student</a>
+
+</body>
+</html>
+
+
+Data.html:
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="AddStudent" method=post>
+	Enter Name: <input type=text name="name"/>
+<br>
+	Enter Age:<input type=text name="age"/>
+<br>
+	Enter Address:<input type=text name="address"/>
+<br><br>
+<input type=submit>
+</form>
+</body>
+</html>
+
+
+web.xml file:
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0">
+  <display-name>Assign1</display-name>
+  <welcome-file-list>
+    <welcome-file>Student.html</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>AddStudent</display-name>
+    <servlet-name>AddStudent</servlet-name>
+    <servlet-class>AddStudent</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddStudent</servlet-name>
+    <url-pattern>/AddStudent</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ViewStudent</display-name>
+    <servlet-name>ViewStudent</servlet-name>
+    <servlet-class>ViewStudent</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewStudent</servlet-name>
+    <url-pattern>/ViewStudent</url-pattern>
+  </servlet-mapping>
+</web-app>
+
+
+
