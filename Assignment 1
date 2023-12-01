@@ -1,1 +1,183 @@
+//Product
+package Day1Assignemnt;
 
+public class Product 
+{
+	private int pid,qty;
+	private double cost;
+	private String pname;
+	public int getPid() {
+		return pid;
+	}
+	
+	public int getQty() {
+		return qty;
+	}
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+	public double getCost() {
+		return cost;
+	}
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+	public String getPname() {
+		return pname;
+	}
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
+
+	public Product(int qty, double cost, String pname) {
+		
+		this.qty = qty;
+		this.cost = cost;
+		this.pname = pname;
+	}
+
+	public Product() {
+		
+	}
+	@Override
+	public String toString() {
+		return "Product [pid=" + pid + ", qty=" + qty + ", cost=" + cost + ", pname=" + pname + "]";
+	}
+	
+}
+
+//Q1
+package Day1Assignemnt;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Scanner;
+
+import com.mysql.cj.jdbc.result.ResultSetMetaData;
+import com.mysql.cj.protocol.Resultset;
+
+public class Que1 {
+	public static void main(String[] args) {
+		String url = "jdbc:mysql://localhost:3306/jakartaEE";
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the roll number");
+		int rollno = sc.nextInt();
+		
+		System.out.println("Enter the name");
+		sc.nextLine();
+		String name = sc.nextLine();
+		System.out.println("Enter the age");
+		int age = sc.nextInt();
+		try(Connection con = DriverManager.getConnection(url,"root","Abhi@1432");){
+			PreparedStatement pst = con.prepareStatement("insert into student values(?,?,?)");
+			pst.setInt(1, rollno);
+			pst.setString(2, name);
+			pst.setInt(3, age);
+			pst.execute();
+			System.out.println("Data inserted");
+			
+			pst = con.prepareStatement("select * from student");
+			ResultSet rs = pst.executeQuery();
+			java.sql.ResultSetMetaData rsm = rs.getMetaData();
+			int col = rsm.getColumnCount();
+			for (int i = 1; i <= col; i++) {
+				System.out.print(rsm.getColumnName(i)+"\t");
+			}
+			System.out.println();
+			while(rs.next()) {
+				int r = rs.getInt("rollno");
+				String n = rs.getString("name");
+				int a = rs.getInt("age");
+				System.out.println(r + "\t" + n + "\t" + a);
+			}
+		}catch(Exception ee){
+			System.out.println("error");
+		}
+	}
+}
+//Q2)
+package Day1Assignemnt;
+
+import java.sql.*;
+import java.util.Scanner;
+
+
+public class Que2 {
+	public static void main(String[] args) {
+		String url = "jdbc:mysql://localhost:3306/jakartaEE";
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter designation");
+		String desig = sc.nextLine();
+		try(Connection con = DriverManager.getConnection(url,"root","Abhi@1432");){
+			PreparedStatement pst = con.prepareStatement("select * from employee where designation=?");
+			pst.setString(1,desig );
+			ResultSet rs = pst.executeQuery();
+			ResultSetMetaData rms = rs.getMetaData();
+			int col = rms.getColumnCount();
+			for(int i = 1; i<=col; i++) {
+				System.out.print(rms.getColumnName(i)+"\t");
+			}
+			System.out.println();
+			while(rs.next()) {
+				int a = rs.getInt(1);
+				String b = rs.getString(2);
+				String c = rs.getString(3);
+				System.out.println(a+"\t"+b+"\t"+c);
+			}
+		}catch(Exception ee) {
+			
+		}
+	}
+}
+
+//Q3)
+package Day1Assignemnt;
+
+import java.sql.*;
+
+
+public class Que3 {
+	public static void main(String[] args) {
+		Product p1 = new Product(10, 329, "Book");
+		System.out.println(p1);
+		
+		String url = "jdbc:mysql://localhost:3306/jakartaEE";
+		
+		try(Connection con = DriverManager.getConnection(url,"root","Abhi@1432");){
+			PreparedStatement pst = con.prepareStatement("insert into product(qty,cost,pname) values(?,?,?)");
+			pst.setInt(1, p1.getQty());
+			pst.setDouble(2, p1.getCost());
+			pst.setString(3, p1.getPname());
+			
+			pst.execute();
+			
+			p1 = null;
+			p1 = new Product();
+			pst = con.prepareStatement("select * from product");
+			ResultSet rs = pst.executeQuery();
+			ResultSetMetaData rsm = rs.getMetaData();
+			int col = rsm.getColumnCount();
+			for (int i = 1; i <= col; i++) {
+				System.out.print(rsm.getColumnName(i)+"\t");
+			}
+			System.out.println();
+			while(rs.next()) {
+				int r = rs.getInt(1);
+				int q = rs.getInt(2);
+				p1.setQty(q);
+				double c = rs.getDouble(3);
+				p1.setCost(c);
+				String pn = rs.getString(4);
+				p1.setPname(pn);
+				
+				System.out.println(r + "\t" + q + "\t" + c + "\t" + pn);
+			}
+			
+		}catch(Exception ee) {
+			System.out.println(ee);
+		}
+		System.out.println(p1);
+	}
+}
