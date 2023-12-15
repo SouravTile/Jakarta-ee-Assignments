@@ -8,7 +8,6 @@ create a form in jsp "person.html" (thymeleaf) which will accept name,address an
  "PersonController" with "@GetMapping" and "@PostMapping" methods.
 */
 
-
 package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
