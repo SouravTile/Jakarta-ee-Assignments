@@ -1,0 +1,180 @@
+/*
+Person class with
+name,address and age
+toString() method.
+
+create a form in jsp "person.html" (thymeleaf) which will accept name,address and age and on submit control will go to "View.html" (thymeleaf) which will display person class object with name,address and age entered by user.
+
+ "PersonController" with "@GetMapping" and "@PostMapping" methods.
+*/
+
+
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AssignmentPersonApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(AssignmentPersonApplication.class, args);
+	}
+
+}
+
+
+package com.example.demo;
+public class person 
+{
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "["+personName+"   "+age+"   "+Address+ " ]";
+	}
+	private String personName;
+	private int age;
+	private String Address;
+	public String getPersonName() {
+		return personName;
+	}
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getAddress() {
+		return Address;
+	}
+	public void setAddress(String address) {
+		Address = address;
+	}	
+}
+
+
+
+package com.example.demo;
+
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import jakarta.servlet.http.HttpSession;
+@Controller
+public class personNewController
+{
+
+	// for welcome page "Home.html"
+
+	@GetMapping("/")
+	public String home()
+	{
+		return "Home";
+	}
+	@GetMapping("person")
+	public String before()
+	{
+		return "person";
+	}
+	
+	@PostMapping("person")
+	public String afterSubmit(@RequestParam("personName") String name,@RequestParam("age") int age,@RequestParam("Address") String Address,Model model) 
+	{
+		person per=new person();
+		per.setPersonName(name);
+		per.setAge(age);
+		per.setAddress(Address);
+		model.addAttribute("mb", per);
+		return "View";
+	}
+}
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<a href="person">Click here to add Person</a>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form th:action="@{/person}"  method="post">
+    <table border="10">
+        <tr>
+            <td>Enter Name</td>
+            <td><input type="text" name="personName" /></td>
+        </tr>
+        <tr>
+            <td>Enter age</td>
+            <td><input type="text" name="age" /></td>
+        </tr>
+        <tr>
+            <td>Enter Address</td>
+            <td><input type="text" name="Address" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<p th:text="${mb.personName}">
+<br>
+<p th:text="${mb.age}">
+<br>
+<p th:text="${mb.Address}">
+<br>
+</body>
+</html>
+
+
+
+spring.mvc.view.prefix="/"
+spring.mvc.view.suffix=".html"
+
+
+package com.example.demo;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class AssignmentPersonApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+
+
