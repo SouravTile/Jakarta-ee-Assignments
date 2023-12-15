@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.entities.Student;
 import com.example.repositories.StudentRepository;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -41,7 +40,6 @@ public class StudentController
 }
 
 
-
 package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
@@ -60,7 +58,6 @@ public class SixthApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SixthApplication.class, args);
 	}
-
 }
 
 
