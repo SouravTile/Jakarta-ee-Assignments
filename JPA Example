@@ -56,7 +56,6 @@ public class SixthApplication {
 	}
 }
 
-
 package com.example.entities;
 
 import jakarta.persistence.Column;
