@@ -96,7 +96,6 @@ public class Que1 {
 }
 //Q2]
 package Day1Assignemnt;
-
 import java.sql.*;
 import java.util.Scanner;
 
