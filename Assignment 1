@@ -26,7 +26,6 @@ public class Product
 	public void setPname(String pname) {
 		this.pname = pname;
 	}
-
 	public Product(int qty, double cost, String pname) {
 		
 		this.qty = qty;
