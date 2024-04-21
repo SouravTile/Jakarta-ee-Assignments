@@ -1,6 +1,5 @@
 //Product
 package Day1Assignemnt;
-
 public class Product 
 {
 	private int pid,qty;
