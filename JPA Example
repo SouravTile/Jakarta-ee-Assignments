@@ -114,7 +114,6 @@ public interface StudentRepository extends JpaRepository<Student,Integer>
 }
 
 
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
